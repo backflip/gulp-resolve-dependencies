@@ -1,0 +1,36 @@
+{
+  "name": "gulp-resolve-dependencies",
+  "version": "0.0.1",
+  "description": "Resolve dependency directives in assets (e.g. \"@depend\" or \"//= require\" in JavaScript)",
+  "license": "MIT",
+  "repository": "backflip/gulp-resolve-dependencies",
+  "author": "Thomas Jaggi",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "main": "./index.js",
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "js",
+    "dependencies",
+    "depend",
+    "depends",
+    "concat",
+    "order",
+    "juicer",
+    "sprockets"
+  ],
+  "dependencies": {
+    "gulp-util": "~2.2.0",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "event-stream": "~3.1.0",
+    "gulp": "~3.5.2"
+  }
+}
