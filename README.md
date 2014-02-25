@@ -18,7 +18,7 @@ var concat = require('gulp-concat');
 gulp.task('js', function(){
   gulp.src(['app/assets/js/main.js'])
     .pipe(resolveDependencies({
-      pattern: /\* @depend (.*?\.js)/g
+      pattern: /\* @requires [\s-]*(.*?\.js)/g
     })
     .pipe(concat())
     .pipe(gulp.dest('dest/assets/js/'));
@@ -29,8 +29,8 @@ And use the directives in your JS files (dependencies can be nested, they are ha
 
 ```javascript
 /**
- * @depend libs/jquery/jquery.js
- * @depend ../modules/slideshow/slideshow.js
+ * @requires libs/jquery/jquery.js
+ * @requires ../modules/slideshow/slideshow.js
  */
 
 (function(window, document, $, undefined) {
@@ -53,7 +53,7 @@ And use the directives in your JS files (dependencies can be nested, they are ha
 #### options.pattern
 Type: `RegExp`
 
-The matching pattern (optional, defaults to ```/\* @depend (.*?\.js)/g``).
+The matching pattern (optional, defaults to ```/\* @requires [\s-]*(.*?\.js)/g``).
 
 #### options.log
 Type: `Boolean`

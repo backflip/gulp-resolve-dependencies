@@ -39,6 +39,12 @@ function resolveDependencies(config) {
 					continue;
 				}
 
+				// Check existence
+				if (!fs.existsSync(filePath)) {
+					gutil.log('[' + gutil.colors.red(PLUGIN_NAME) + '] File not found: ', filePath);
+					continue;
+				}
+
 				// Create new file
 				file = new gutil.File({
 					base: targetFile.base,
@@ -60,7 +66,7 @@ function resolveDependencies(config) {
 
 	// Set default values
 	config = _.merge({
-		pattern: /\* @depend (.*?\.js)/g,
+		pattern: /\* @requires [\s-]*(.*?\.js)/g,
 		log: false
 	}, config);
 

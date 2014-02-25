@@ -1,4 +1,4 @@
 /**
- * @depend test/test.js
+ * @requires test/test.js
  */
 console.log('main.js');

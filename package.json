@@ -1,7 +1,7 @@
 {
   "name": "gulp-resolve-dependencies",
-  "version": "0.0.1",
-  "description": "Resolve dependency directives in assets (e.g. \"@depend\" or \"//= require\" in JavaScript)",
+  "version": "0.1.0",
+  "description": "Resolve dependency directives in assets (e.g. \"@requires\" or \"//= require\" in JavaScript)",
   "license": "MIT",
   "repository": "backflip/gulp-resolve-dependencies",
   "author": "Thomas Jaggi",

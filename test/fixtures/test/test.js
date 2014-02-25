@@ -1,4 +1,4 @@
 /**
- * @depend ../libs/lib.js
+ * @requires ../libs/lib.js
  */
 console.log('test.js');
