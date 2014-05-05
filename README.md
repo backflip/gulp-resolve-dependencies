@@ -58,5 +58,10 @@ The matching pattern (optional, defaults to ```/\* @requires [\s-]*(.*?\.js)/g``
 #### options.log
 Type: `Boolean`
 
-Whether to log the resolved dependencies (optional, defaults to ```false```.
+Whether to log the resolved dependencies (optional, defaults to ```false```).
+
+#### options.fail
+Type: `Boolean`
+
+Whether to fail if dependency is not found (optional, defaults to ```true```).
 
