@@ -19,7 +19,7 @@ gulp.task('js', function(){
   gulp.src(['app/assets/js/main.js'])
     .pipe(resolveDependencies({
       pattern: /\* @requires [\s-]*(.*?\.js)/g
-    })
+    }))
         .on('error', function(err) {
             console.log(err.message);
         })
