@@ -41,11 +41,7 @@ function resolveDependencies(config) {
 
 				// Check existence
 				if (!fs.existsSync(filePath)) {
-					gutil.log('[' + gutil.colors.red(PLUGIN_NAME) + '] File not found: ', filePath);
-
-					if (config.fail) {
-						process.exit(1);
-					}
+					stream.emit('error', new Error('File not found: ' + filePath));
 
 					continue;
 				}
@@ -72,8 +68,7 @@ function resolveDependencies(config) {
 	// Set default values
 	config = _.merge({
 		pattern: /\* @requires [\s-]*(.*?\.js)/g,
-		log: false,
-		fail: true
+		log: false
 	}, config);
 
 	// Happy streaming
