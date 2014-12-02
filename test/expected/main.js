@@ -1,7 +1,10 @@
 console.log('lib.js');
 
+console.log('lib2.js');
+
 /**
  * @requires ../libs/lib.js
+ * @requires ../libs/lib2.js/lib2.js
  */
 console.log('test.js');
 
