@@ -67,7 +67,7 @@ function resolveDependencies(config) {
 
 	// Set default values
 	config = _.merge({
-		pattern: /\* @requires [\s-]*(.*?\.js)/g,
+		pattern: /\* @requires [\s-]*(.*\.js)/g,
 		log: false
 	}, config);
 

@@ -18,7 +18,7 @@ var concat = require('gulp-concat');
 gulp.task('js', function(){
   gulp.src(['app/assets/js/main.js'])
     .pipe(resolveDependencies({
-      pattern: /\* @requires [\s-]*(.*?\.js)/g
+      pattern: /\* @requires [\s-]*(.*\.js)/g
     }))
         .on('error', function(err) {
             console.log(err.message);
