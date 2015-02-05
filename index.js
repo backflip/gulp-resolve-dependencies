@@ -4,12 +4,14 @@ var fs = require('fs'),
 	path = require('path'),
 	gutil = require('gulp-util'),
 	_ = require('lodash'),
-	Stream = require('stream');
+	Stream = require('stream'),
+	DAG = require('dag');
 
 var PLUGIN_NAME  = 'gulp-resolve-dependencies';
 
 function resolveDependencies(config) {
 	var stream,
+		dag = new DAG(),
 		fileCache = [],
 		filesReturned = [],
 		getFiles = function(targetFile) {
@@ -34,9 +36,10 @@ function resolveDependencies(config) {
 			while (match = pattern.exec(content)) {
 				filePath = path.join(path.dirname(targetFile.path), match[1]);
 
-				// Skip if already added to dependencies
-				if (_.indexOf(fileCache, filePath) !== -1) {
-					continue;
+				try {
+					dag.addEdge(targetFile.path, filePath);
+				} catch (ex) {
+					stream.emit('error', new Error('circular file 1: ' + targetFile.path + ' file 2: ' + filePath));
 				}
 
 				// Check existence
