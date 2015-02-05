@@ -23,4 +23,12 @@ describe('gulp-resolve-dependencies', function() {
 				done();
 			}));
 	});
+
+	it('should throw error if hit circular dependency', function(done) {
+		gulp.src(__dirname + '/circular/a.js')
+			.pipe(resolveDependencies())
+			.on('error', function () {
+				done();
+			});
+	});
 });
