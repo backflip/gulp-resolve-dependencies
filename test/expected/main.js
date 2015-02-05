@@ -1,6 +1,9 @@
-console.log('lib.js');
-
 console.log('lib2.js');
+
+/**
+ * @requires lib2.js/lib2.js
+ */
+console.log('lib.js');
 
 /**
  * @requires ../libs/lib.js
