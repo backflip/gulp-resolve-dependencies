@@ -27,13 +27,13 @@
   ],
   "dependencies": {
     "dag": "0.0.1",
-    "gulp-util": "~3.0.1",
-    "lodash": "~2.4.1"
+    "gulp-util": "^3.0.3",
+    "lodash": "^3.1.0"
   },
   "devDependencies": {
-    "event-stream": "~3.1.7",
-    "gulp": "~3.8.10",
+    "event-stream": "^3.2.2",
+    "gulp": "^3.8.10",
     "gulp-concat": "^2.4.3",
-    "mocha": "~2.0.1"
+    "mocha": "^2.1.0"
   }
 }
