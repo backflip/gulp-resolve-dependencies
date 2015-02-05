@@ -24,10 +24,10 @@ describe('gulp-resolve-dependencies', function() {
 			}));
 	});
 
-	it('should throw error if hit circular dependency', function(done) {
+	it('should throw error due to circular dependency', function(done) {
 		gulp.src(__dirname + '/circular/a.js')
 			.pipe(resolveDependencies())
-			.on('error', function () {
+			.on('error', function() {
 				done();
 			});
 	});
