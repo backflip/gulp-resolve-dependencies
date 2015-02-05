@@ -26,7 +26,9 @@ describe('gulp-resolve-dependencies', function() {
 
 	it('should throw error due to circular dependency', function(done) {
 		gulp.src(__dirname + '/circular/a.js')
-			.pipe(resolveDependencies())
+			.pipe(resolveDependencies({
+				ignoreCircularDependencies: false
+			}))
 			.on('error', function() {
 				done();
 			});

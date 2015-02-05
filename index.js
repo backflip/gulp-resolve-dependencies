@@ -10,7 +10,12 @@ var fs = require('fs'),
 var PLUGIN_NAME  = 'gulp-resolve-dependencies';
 
 function resolveDependencies(config) {
-	var stream,
+	var defaults = {
+			pattern: /\* @requires [\s-]*(.*\.js)/g,
+			log: false,
+			ignoreCircularDependencies: true
+		},
+		stream,
 		dag = new DAG(),
 		fileCache = [],
 		filesReturned = [],
@@ -36,15 +41,21 @@ function resolveDependencies(config) {
 			while (match = pattern.exec(content)) {
 				filePath = path.join(path.dirname(targetFile.path), match[1]);
 
+				// Check for circular dependencies
 				try {
 					dag.addEdge(targetFile.path, filePath);
-				} catch (ex) {
-					stream.emit('error', new Error('circular file 1: ' + targetFile.path + ' file 2: ' + filePath));
+				} catch (e) {
+					// Emit error or just continue
+					if (!config.ignoreCircularDependencies) {
+						stream.emit('error', new Error(PLUGIN_NAME + ': Circular dependency between "' + targetFile.path + '" and "' + filePath + '"'));
+					} else {
+						continue;
+					}
 				}
 
 				// Check existence
 				if (!fs.existsSync(filePath)) {
-					stream.emit('error', new Error('File not found: ' + filePath));
+					stream.emit('error', new Error(PLUGIN_NAME + ': File not found: ' + filePath));
 
 					continue;
 				}
@@ -69,10 +80,7 @@ function resolveDependencies(config) {
 		};
 
 	// Set default values
-	config = _.merge({
-		pattern: /\* @requires [\s-]*(.*\.js)/g,
-		log: false
-	}, config);
+	config = _.merge(defaults, config);
 
 	// Happy streaming
 	stream = Stream.Transform({
