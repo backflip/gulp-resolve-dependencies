@@ -1,3 +1,7 @@
+## 2.0.0
+
+- Disable ```options.ignoreCircularDependencies``` by default.
+
 ## 1.1.0
 
 - Throw an error when detecting a circular dependency (thanks to @huang64). Add option ```ignoreCircularDependencies``` to disable this behavior.

@@ -13,7 +13,7 @@ function resolveDependencies(config) {
 	var defaults = {
 			pattern: /\* @requires [\s-]*(.*\.js)/g,
 			log: false,
-			ignoreCircularDependencies: true
+			ignoreCircularDependencies: false
 		},
 		stream,
 		dag = new DAG(),

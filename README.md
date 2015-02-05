@@ -58,7 +58,7 @@ Circular dependencies are either silently ignored or emit an error (thanks to [@
 #### options.pattern
 Type: `RegExp`
 
-The matching pattern (defaults to ```/\* @requires [\s-]*(.*?\.js)/g``).
+The matching pattern (defaults to ```/\* @requires [\s-]*(.*?\.js)/g```).
 
 #### options.log
 Type: `Boolean`
@@ -68,5 +68,5 @@ Whether to log the resolved dependencies (defaults to ```false```).
 #### options.ignoreCircularDependencies
 Type: `Boolean`
 
-Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```true```).
+Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```false```).
 
