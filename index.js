@@ -13,7 +13,10 @@ function resolveDependencies(config) {
 	var defaults = {
 			pattern: /\* @requires [\s-]*(.*\.js)/g,
 			log: false,
-			ignoreCircularDependencies: false
+			ignoreCircularDependencies: false,
+			resolvePath: function(match, targetFile) {
+				return path.join(path.dirname(targetFile.path), match);
+			}
 		},
 		stream,
 		dag = new DAG(),
@@ -39,7 +42,7 @@ function resolveDependencies(config) {
 			content = targetFile.contents.toString('utf8');
 
 			while (match = pattern.exec(content)) {
-				filePath = path.join(path.dirname(targetFile.path), match[1]);
+				filePath = config.resolvePath(match[1], targetFile);
 
 				// Check for circular dependencies
 				try {

@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
 	fs = require('fs'),
+	path = require('path'),
 	es = require('event-stream'),
 	assert = require('assert'),
 	concat = require('gulp-concat'),
@@ -18,6 +19,34 @@ describe('gulp-resolve-dependencies', function() {
 				);
 
 				fs.unlinkSync(__dirname + '/results/main.js');
+				fs.rmdirSync(__dirname + '/results/');
+
+				done();
+			}));
+	});
+
+	it('should use resolvePath and generate concatenated JS file', function(done) {
+		function toAbsolutePath(match, targetFile) {
+			var absolutePath = path.join(__dirname, 'fixtures', match);
+			return absolutePath;
+		}
+
+		gulp.src(__dirname + '/fixtures/main2.js')
+			.pipe(resolveDependencies({
+				pattern: /\* @requires [\s-]*(.*)/g,
+				resolvePath: toAbsolutePath
+			}))
+			.pipe(concat('main2.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				var expected = fs.readFileSync(__dirname + '/expected/main2.js', 'utf8');
+
+				assert.equal(
+					fs.readFileSync(__dirname + '/results/main2.js', 'utf8'),
+					expected
+				);
+
+				fs.unlinkSync(__dirname + '/results/main2.js');
 				fs.rmdirSync(__dirname + '/results/');
 
 				done();
