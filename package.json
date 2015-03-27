@@ -1,6 +1,6 @@
 {
   "name": "gulp-resolve-dependencies",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Resolve dependency directives in assets (e.g. \"@requires\" or \"//= require\" in JavaScript)",
   "license": "MIT",
   "repository": "backflip/gulp-resolve-dependencies",
