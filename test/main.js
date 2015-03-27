@@ -26,27 +26,27 @@ describe('gulp-resolve-dependencies', function() {
 	});
 
 	it('should use resolvePath and generate concatenated JS file', function(done) {
-		function toAbsolutePath(match, targetFile) {
-			var absolutePath = path.join(__dirname, 'fixtures', match);
-			return absolutePath;
+		function resolvePath(match, targetFile) {
+			match = match.replace(/com\.example\./, '').replace(/\./g, '/');
+			match += '.js';
+
+			return path.join(path.dirname(targetFile.path), match);
 		}
 
-		gulp.src(__dirname + '/fixtures/main2.js')
+		gulp.src(__dirname + '/fixtures/resolvepath.js')
 			.pipe(resolveDependencies({
 				pattern: /\* @requires [\s-]*(.*)/g,
-				resolvePath: toAbsolutePath
+				resolvePath: resolvePath
 			}))
-			.pipe(concat('main2.js'))
+			.pipe(concat('resolvepath.js'))
 			.pipe(gulp.dest(__dirname + '/results/'))
 			.pipe(es.wait(function() {
-				var expected = fs.readFileSync(__dirname + '/expected/main2.js', 'utf8');
-
 				assert.equal(
-					fs.readFileSync(__dirname + '/results/main2.js', 'utf8'),
-					expected
+					fs.readFileSync(__dirname + '/results/resolvepath.js', 'utf8'),
+					fs.readFileSync(__dirname + '/expected/resolvepath.js', 'utf8')
 				);
 
-				fs.unlinkSync(__dirname + '/results/main2.js');
+				fs.unlinkSync(__dirname + '/results/resolvepath.js');
 				fs.rmdirSync(__dirname + '/results/');
 
 				done();

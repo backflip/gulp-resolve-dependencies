@@ -60,6 +60,22 @@ Type: `RegExp`
 
 The matching pattern (defaults to ```/\* @requires [\s-]*(.*?\.js)/g```).
 
+#### options.resolvePath
+Type: `Function`
+
+Resolver for matched paths. Default:
+```javascript
+function(match, targetFile) {
+    return path.join(path.dirname(targetFile.path), match);
+}
+```
+
+Parameters:
+* `match` {String} Matched file path (in the example above this would be `libs/jquery/jquery.js` and `../modules/slideshow/slideshow.js`, respectively)
+* `targetFile` {Vinyl file object} Currently parsed file (where the matches were found)
+
+The `path` package is available in this context.
+
 #### options.log
 Type: `Boolean`
 
@@ -69,8 +85,3 @@ Whether to log the resolved dependencies (defaults to ```false```).
 Type: `Boolean`
 
 Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```false```).
-
-#### options.resolvePath
-Type: `Function`
-
-This function allows to override default file path resolver.
