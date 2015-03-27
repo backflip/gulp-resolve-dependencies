@@ -70,3 +70,7 @@ Type: `Boolean`
 
 Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```false```).
 
+#### options.resolvePath
+Type: `Function`
+
+This function allows to override default file path resolver.
