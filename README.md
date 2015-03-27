@@ -48,7 +48,7 @@ And use the directives in your JS files (dependencies can be nested, they are ha
 
 **Warning**: This might not be very efficient (especially in case of nested dependencies). Some kind of caching mechanism could come in handy.
 
-Circular dependencies are either silently ignored or emit an error (thanks to [@huang64](https://github.com/backflip/gulp-resolve-dependencies/pull/7)). See ```options.ignoreCircularDependencies``` below.
+Circular dependencies are either silently ignored or emit an error. See ```options.ignoreCircularDependencies``` below.
 
 
 ## API
@@ -85,3 +85,9 @@ Whether to log the resolved dependencies (defaults to ```false```).
 Type: `Boolean`
 
 Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```false```).
+
+
+## Contributors
+
+* @huang64: [Circular dependencies](https://github.com/backflip/gulp-resolve-dependencies/pull/7)
+* @doronin: [Path resolver option](https://github.com/backflip/gulp-resolve-dependencies/pull/8)
