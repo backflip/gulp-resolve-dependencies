@@ -1,3 +1,11 @@
+## 2.2.0
+
+- Add file stats to resolved files when adding them to the stream.
+
+## 2.1.0
+
+- Add ```resolvePath``` option.
+
 ## 2.0.0
 
 - Disable ```options.ignoreCircularDependencies``` by default.
