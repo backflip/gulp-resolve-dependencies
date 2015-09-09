@@ -67,7 +67,8 @@ function resolveDependencies(config) {
 				file = new gutil.File({
 					base: targetFile.base,
 					path: filePath,
-					contents: fs.readFileSync(filePath)
+					contents: fs.readFileSync(filePath),
+					stat: fs.statSync(filePath)
 				});
 
 				// Get new dependencies

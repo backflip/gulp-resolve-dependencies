@@ -4,6 +4,7 @@ var gulp = require('gulp'),
 	es = require('event-stream'),
 	assert = require('assert'),
 	concat = require('gulp-concat'),
+	tap = require('gulp-tap'),
 	resolveDependencies = require('../');
 
 describe('gulp-resolve-dependencies', function() {
@@ -57,6 +58,20 @@ describe('gulp-resolve-dependencies', function() {
 		gulp.src(__dirname + '/circular/a.js')
 			.pipe(resolveDependencies())
 			.on('error', function() {
+				done();
+			});
+	});
+
+	it('should report the initial file stats', function(done) {
+		gulp.src(__dirname + '/fixtures/main.js')
+			.pipe(resolveDependencies())
+			.pipe(tap(function(file) {
+				assert.deepEqual(
+					fs.statSync(file.path).mtime,
+					file.stat.mtime
+				);
+			}))
+			.on('end', function() {
 				done();
 			});
 	});
