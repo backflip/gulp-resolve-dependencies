@@ -15,7 +15,7 @@ function resolveDependencies(config) {
 			log: false,
 			ignoreCircularDependencies: false,
 			resolvePath: function(match, targetFile) {
-				return path.join(path.dirname(targetFile.path), match);
+				return path.join(path.dirname(path.resolve(targetFile.path)), match);
 			}
 		},
 		stream,
