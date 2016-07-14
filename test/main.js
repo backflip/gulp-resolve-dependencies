@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
 	fs = require('fs'),
+	file = require('gulp-file'),
 	path = require('path'),
 	es = require('event-stream'),
 	assert = require('assert'),
@@ -20,6 +21,27 @@ describe('gulp-resolve-dependencies', function() {
 				);
 
 				fs.unlinkSync(__dirname + '/results/main.js');
+				fs.rmdirSync(__dirname + '/results/');
+
+				done();
+			}));
+	});
+
+	it('should handle relative file paths', function(done) {
+
+		gulp.src(__dirname + '/fixtures/main.js')
+			// Add a new file
+			.pipe(file('test/fixtures/relative.js', ['/**\n', ' * @requires main.js\n', ' */\n', 'console.log(\'relative.js\');\n'].join('')))
+			.pipe(resolveDependencies())
+			.pipe(concat('relative.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				assert.equal(
+					fs.readFileSync(__dirname + '/results/relative.js', 'utf8'),
+					fs.readFileSync(__dirname + '/expected/relative.js', 'utf8')
+				);
+
+				fs.unlinkSync(__dirname + '/results/relative.js');
 				fs.rmdirSync(__dirname + '/results/');
 
 				done();
