@@ -2,7 +2,9 @@
 
 var fs = require('fs'),
 	path = require('path'),
-	gutil = require('gulp-util'),
+	Vinyl = require('vinyl'),
+	Log = require('fancy-log'),
+	AnsiColors = require('ansi-colors'),
 	_ = require('lodash'),
 	Stream = require('stream'),
 	DAG = require('dag');
@@ -64,7 +66,7 @@ function resolveDependencies(config) {
 				}
 
 				// Create new file
-				file = new gutil.File({
+				file = new Vinyl({
 					base: targetFile.base,
 					path: filePath,
 					contents: fs.readFileSync(filePath),
@@ -122,7 +124,7 @@ function resolveDependencies(config) {
 
 	stream._flush = function(cb) {
 		if (config.log) {
-			gutil.log('[' + gutil.colors.green(PLUGIN_NAME) + '] Files returned to stream:', filesReturned);
+			Log('[' + AnsiColors.green(PLUGIN_NAME) + '] Files returned to stream:', filesReturned);
 		}
 
 		cb();
