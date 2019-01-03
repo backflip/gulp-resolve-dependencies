@@ -91,3 +91,5 @@ Whether to just continue instead of emitting an error if circular dependencies a
 
 * @huang64: [Circular dependencies](https://github.com/backflip/gulp-resolve-dependencies/pull/7)
 * @doronin: [Path resolver option](https://github.com/backflip/gulp-resolve-dependencies/pull/8)
+* @goodforenergy: [Relative file paths](https://github.com/backflip/gulp-resolve-dependencies/pull/16)
+* @adrianosanti: [Outdated dependencies](https://github.com/backflip/gulp-resolve-dependencies/pull/18)
