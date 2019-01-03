@@ -85,7 +85,7 @@ describe('gulp-resolve-dependencies', function() {
 					file.stat.mtime
 				);
 			}))
-			.on('end', function() {
+			.on('finish', function() {
 				done();
 			});
 	});
