@@ -64,7 +64,7 @@ function resolveDependencies(config) {
 
 					continue;
 				}
-				
+
 				// Create new file
 				file = new Vinyl({
 					base: targetFile.base,
@@ -103,7 +103,7 @@ function resolveDependencies(config) {
 		}
 
 		files = getFiles(file);
-		
+
 		if (!files) {
 			return cb();
 		}
