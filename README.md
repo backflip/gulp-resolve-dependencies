@@ -50,6 +50,7 @@ And use the directives in your JS files (dependencies can be nested, they are ha
 
 Circular dependencies are either silently ignored or emit an error. See ```options.ignoreCircularDependencies``` below.
 
+`gulp.src` will not necessarily return files in a [deterministic way](https://github.com/gulpjs/gulp/issues/687). If this turns out to be an issue, using a plugin like [`gulp-sort`](https://www.npmjs.com/package/gulp-sort) or [`gulp-rder`](https://www.npmjs.com/package/gulp-order) right after `gulp.src` might be an option for you. Thanks to @fabiospampinato for [pointing this out](https://github.com/backflip/gulp-resolve-dependencies/issues/10).
 
 ## API
 
