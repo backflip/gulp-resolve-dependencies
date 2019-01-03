@@ -26,7 +26,9 @@ function resolveDependencies(config) {
 		fileCache = [],
 		filesReturned = [],
 		getFiles = function(targetFile) {
-			var pattern = cloneRegexp(config.pattern),
+			var pattern = cloneRegexp(config.pattern, {
+					lastIndex: 0
+				}),
 				files = [],
 				content,
 				match,
