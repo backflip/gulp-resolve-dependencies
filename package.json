@@ -6,7 +6,7 @@
   "repository": "backflip/gulp-resolve-dependencies",
   "author": "Thomas Jaggi",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=6"
   },
   "scripts": {
     "pretest": "npm i",
