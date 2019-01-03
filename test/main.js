@@ -1,11 +1,25 @@
 var gulp = require('gulp'),
 	fs = require('fs'),
+	file = require('gulp-file'),
 	path = require('path'),
 	es = require('event-stream'),
 	assert = require('assert'),
 	concat = require('gulp-concat'),
 	tap = require('gulp-tap'),
 	resolveDependencies = require('../');
+
+function assertFilesEqual(file) {
+	var result = path.join(__dirname, 'results', file);
+	var expected = path.join(__dirname, 'expected', file);
+
+	assert.equal(
+		fs.readFileSync(result, 'utf8'),
+		fs.readFileSync(expected, 'utf8')
+	);
+
+	fs.unlinkSync(result);
+	fs.rmdirSync(__dirname + '/results/');
+}
 
 describe('gulp-resolve-dependencies', function() {
 	it('should generate concatenated JS file', function(done) {
@@ -14,14 +28,21 @@ describe('gulp-resolve-dependencies', function() {
 			.pipe(concat('main.js'))
 			.pipe(gulp.dest(__dirname + '/results/'))
 			.pipe(es.wait(function() {
-				assert.equal(
-					fs.readFileSync(__dirname + '/results/main.js', 'utf8'),
-					fs.readFileSync(__dirname + '/expected/main.js', 'utf8')
-				);
+				assertFilesEqual('main.js');
+				done();
+			}));
+	});
 
-				fs.unlinkSync(__dirname + '/results/main.js');
-				fs.rmdirSync(__dirname + '/results/');
+	it('should handle relative file paths', function(done) {
 
+		gulp.src(__dirname + '/fixtures/main.js')
+			// Add a new file
+			.pipe(file('test/fixtures/relative.js', ['/**\n', ' * @requires main.js\n', ' */\n', 'console.log(\'relative.js\');\n'].join('')))
+			.pipe(resolveDependencies())
+			.pipe(concat('relative.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				assertFilesEqual('relative.js');
 				done();
 			}));
 	});
@@ -42,14 +63,7 @@ describe('gulp-resolve-dependencies', function() {
 			.pipe(concat('resolvepath.js'))
 			.pipe(gulp.dest(__dirname + '/results/'))
 			.pipe(es.wait(function() {
-				assert.equal(
-					fs.readFileSync(__dirname + '/results/resolvepath.js', 'utf8'),
-					fs.readFileSync(__dirname + '/expected/resolvepath.js', 'utf8')
-				);
-
-				fs.unlinkSync(__dirname + '/results/resolvepath.js');
-				fs.rmdirSync(__dirname + '/results/');
-
+				assertFilesEqual('resolvepath.js');
 				done();
 			}));
 	});
