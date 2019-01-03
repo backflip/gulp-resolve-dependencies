@@ -5,9 +5,10 @@ var fs = require('fs'),
 	Vinyl = require('vinyl'),
 	Log = require('fancy-log'),
 	AnsiColors = require('ansi-colors'),
-	_ = require('lodash'),
+	merge = require('lodash.merge'),
 	Stream = require('stream'),
-	DAG = require('dag');
+	DAG = require('dag'),
+	cloneRegexp = require('clone-regexp');
 
 var PLUGIN_NAME  = 'gulp-resolve-dependencies';
 
@@ -25,24 +26,25 @@ function resolveDependencies(config) {
 		fileCache = [],
 		filesReturned = [],
 		getFiles = function(targetFile) {
-			var pattern = _.clone(config, true).pattern,
+			var pattern = cloneRegexp(config.pattern, {
+					lastIndex: 0
+				}),
 				files = [],
 				content,
 				match,
-				relFilePath,
 				filePath,
 				file,
 				dependencies;
 
 			// Skip if already added to dependencies
-			if (_.indexOf(fileCache, targetFile.path) !== -1) {
+			if (fileCache.includes(targetFile.path)) {
 				return false;
 			} else {
 				fileCache.push(targetFile.path);
 			}
 
 			content = targetFile.contents.toString('utf8');
-
+			
 			while (match = pattern.exec(content)) {
 				filePath = config.resolvePath(match[1], targetFile);
 
@@ -86,7 +88,7 @@ function resolveDependencies(config) {
 		};
 
 	// Set default values
-	config = _.merge(defaults, config);
+	config = merge(defaults, config);
 
 	// Happy streaming
 	stream = Stream.Transform({
@@ -109,9 +111,9 @@ function resolveDependencies(config) {
 		}
 
 		// Add dependencies and file itself to stream
-		files.forEach(_.bind(function(file) {
+		files.forEach(function(file) {
 			this.push(file);
-		}, this));
+		}.bind(this));
 
 		if (config.log) {
 			filesReturned = filesReturned.concat(files.map(function(file) {
