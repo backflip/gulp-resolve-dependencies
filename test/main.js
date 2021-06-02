@@ -6,13 +6,14 @@ var gulp = require('gulp'),
 	assert = require('assert'),
 	concat = require('gulp-concat'),
 	tap = require('gulp-tap'),
-	resolveDependencies = require('../');
+	rewire = require('rewire'),
+	resolveDependencies = rewire('../');
 
 function assertFilesEqual(file) {
 	var result = path.join(__dirname, 'results', file);
 	var expected = path.join(__dirname, 'expected', file);
 
-	assert.equal(
+	assert.strictEqual(
 		fs.readFileSync(result, 'utf8'),
 		fs.readFileSync(expected, 'utf8')
 	);
@@ -22,6 +23,133 @@ function assertFilesEqual(file) {
 }
 
 describe('gulp-resolve-dependencies', function() {
+	describe('#joinExtensionsForGlob', function() {
+		var joinExtensionsForGlob = resolveDependencies.__get__("joinExtensionsForGlob");
+	
+		it('should handle undefined', function() {
+			assert.strictEqual(joinExtensionsForGlob(), "");
+		});
+
+		it('should handle []', function() {
+			assert.strictEqual(joinExtensionsForGlob([]), "");
+		});
+	
+		it('should keep [".ext"] unmodified', function() {
+			assert.strictEqual(joinExtensionsForGlob([".ext"]), ".ext");
+		});
+	
+		it('should keep ["*"] unmodified', function() {
+			assert.strictEqual(joinExtensionsForGlob(["*"]), "*");
+		});
+
+		it('should join [".ext1", ".ext2", "*"]', function() {
+			assert.strictEqual(joinExtensionsForGlob([".ext1", ".ext2", "*"]), "+(.ext1|.ext2|*)");
+		});
+	});
+
+	describe('#globWithExtensionsSync', function() {
+		var globWithExtensionsSync = resolveDependencies.__get__("globWithExtensionsSync");
+	
+		function assertGlobWithExtensionsSync(filePath, expected, extensions) {
+			var files = globWithExtensionsSync(filePath, extensions);
+			assert.ok(files !== undefined && Array.isArray(files));
+			assert.strictEqual(files.length, expected.length);
+			for (var i = 0; i < files.length; ++i) {
+				assert.strictEqual(path.resolve(files[i]), path.resolve(expected[i]));
+			}
+		}
+
+		it('should handle non-existent file path', function() {
+			assertGlobWithExtensionsSync(path.join(__dirname, "invalid"), []);
+		});
+
+		it('should return ./test for "__dirname"', function() {
+			assertGlobWithExtensionsSync(__dirname, [__dirname]);
+		});
+
+		it('should return nothing for "__dirname" and [".ts", ".js"] extensions', function() {
+			assertGlobWithExtensionsSync(__dirname, [], [".ts", ".js"]);
+		});
+
+		it('should return ./test for "__dirname" and [".ts", ".js", ""] extensions', function() {
+			assertGlobWithExtensionsSync(__dirname, [__dirname], [".ts", ".js", ""]);
+		});
+
+		it('should find ./test/fixtures/test for "__dirname/**/test"', function() {
+			assertGlobWithExtensionsSync(path.join(__dirname, "**", "test"), [path.join(__dirname, "fixtures", "test")]);
+		});
+
+		it('should find ./test/fixtures/test/test.js for "__dirname/**/test" and [".ts", ".js"] extensions', function() {
+			assertGlobWithExtensionsSync(
+				path.join(__dirname, "**", "test"),
+				[path.join(__dirname, "fixtures", "test", "test.js")],
+				[".ts", ".js"]
+			);
+		});
+
+		it('should find ./test/fixtures/test/test(2)?.js for "__dirname/**/test*" and [".ts", ".js"] extensions', function() {
+			assertGlobWithExtensionsSync(
+				path.join(__dirname, "**", "test*"),
+				[
+					path.join(__dirname, "fixtures", "test", "test.js"),
+					path.join(__dirname, "fixtures", "test", "test2.js")
+				],
+				[".ts", ".js"]
+			);
+		});
+
+		it('should find ./test/fixtures/test(/test(2)?.js)? for "__dirname/**/test*" and [".ts", ".js", ""] extensions', function() {
+			assertGlobWithExtensionsSync(
+				path.join(__dirname, "**", "test*"),
+				[
+					path.join(__dirname, "fixtures", "test"),
+					path.join(__dirname, "fixtures", "test", "test.js"),
+					path.join(__dirname, "fixtures", "test", "test2.js")
+				],
+				[".ts", ".js", ""]
+			);
+		});
+
+		it('should find ./test/fixtures/test for "__dirname/**/test" and [""] extensions', function() {
+			assertGlobWithExtensionsSync(
+				path.join(__dirname, "**", "test"),
+				[path.join(__dirname, "fixtures", "test")],
+				[""]
+			);
+		});
+	});
+
+	describe('#advancedPathResolver', function() {
+		it('should resolve dependencies in external directories with advancedPathResolver', function(done) {
+			gulp.src(__dirname + '/advanced/app/e.scss')
+				.pipe(resolveDependencies({
+					// Match @use 'name';
+					pattern: /@use '(.*)';/g,
+					resolvePath: resolveDependencies.advancedPathResolver({
+						paths: {
+							"*": [
+								__dirname + "/advanced/liba",
+								__dirname + "/advanced/libb",
+								// For libc directory
+								__dirname + "/advanced"
+							]
+						},
+						// .scss and .css are for allowing a.scss and b.css,
+						// "" is for allowing libc directory
+						extensions: [".scss", ".css", ""],
+						// To resolve libc/index.scss
+						mainFiles: ["index.scss"]
+					})
+				}))
+				.pipe(concat('advanced.scss'))
+				.pipe(gulp.dest(__dirname + '/results/'))
+				.pipe(es.wait(function() {
+					assertFilesEqual('advanced.scss');
+					done();
+				}));
+		});
+	});
+
 	it('should generate concatenated JS file', function(done) {
 		gulp.src(__dirname + '/fixtures/main.js')
 			.pipe(resolveDependencies())

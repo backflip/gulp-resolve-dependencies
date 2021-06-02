@@ -1,0 +1,7 @@
+@use 'a'; // liba/a.scss
+@use 'b'; // libb/b.css
+@use 'libc'; // libc/index.scss
+
+.d {
+    font-size: 14px;
+}

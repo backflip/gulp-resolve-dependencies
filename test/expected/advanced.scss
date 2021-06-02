@@ -1,0 +1,21 @@
+.a {
+    width: 100%;
+}
+.b {
+    height: 100%;
+}
+.c {
+    width: 50%;
+}
+@use 'a'; // liba/a.scss
+@use 'b'; // libb/b.css
+@use 'libc'; // libc/index.scss
+
+.d {
+    font-size: 14px;
+}
+@use 'd.scss'; // relative import
+
+.e {
+    font-size: 16px;
+}
