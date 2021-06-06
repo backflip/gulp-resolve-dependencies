@@ -103,14 +103,14 @@ function advancedPathResolver(config) {
 	function findFile(match, targetFile) {
 		// Try to resolve path in external directories
 		if (config.paths) {
-			for (var [pattern, dirs] of Object.entries(config.paths)) {
+			for (var pattern of Object.keys(config.paths)) {
 				// Does dependency match glob
 				if (!minimatch(match, pattern)) {
 					continue;
 				}
 
 				// Search in directories
-				for(var dir of dirs) {
+				for(var dir of config.paths[pattern]) {
 					var files = globWithExtensionsSync(path.join(dir, match), config.extensions);
 					if (files && files.length !== 0) {
 						return files[0];
