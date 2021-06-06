@@ -8,7 +8,8 @@ var fs = require('fs'),
 	merge = require('lodash.merge'),
 	Stream = require('stream'),
 	DAG = require('dag'),
-	cloneRegexp = require('clone-regexp');
+	cloneRegexp = require('clone-regexp'),
+	minimatch = require('minimatch');
 
 var PLUGIN_NAME  = 'gulp-resolve-dependencies';
 
@@ -19,7 +20,9 @@ function resolveDependencies(config) {
 			ignoreCircularDependencies: false,
 			resolvePath: function(match, targetFile) {
 				return path.join(path.dirname(path.resolve(targetFile.path)), match);
-			}
+			},
+			exclude: [],
+			include: []
 		},
 		stream,
 		dag = new DAG(),
@@ -47,6 +50,22 @@ function resolveDependencies(config) {
 			
 			while (match = pattern.exec(content)) {
 				filePath = config.resolvePath(match[1], targetFile);
+
+				// Check include
+				if (config.include && config.include.length !== 0 && !config.include.some(_ => minimatch(filePath, _))) {
+					if (config.log) {
+						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] File not included:', filePath);
+					}
+					continue;
+				}
+
+				// Check exclude
+				if (config.exclude && config.exclude.some(_ => minimatch(filePath, _))) {
+					if (config.log) {
+						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] File excluded:', filePath);
+					}
+					continue;
+				}
 
 				// Check for circular dependencies
 				try {
