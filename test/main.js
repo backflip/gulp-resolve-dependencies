@@ -89,4 +89,25 @@ describe('gulp-resolve-dependencies', function() {
 				done();
 			});
 	});
+
+	it('should ignore lib2.js', function(done) {
+		gulp.src(__dirname + '/fixtures/main.js')
+			.pipe(resolveDependencies({
+				resolvePath: function(match, targetFile) {
+					// Ignore specific matches
+					if (match.match(/\/lib2\.js$/)) {
+						return null;
+					}
+					
+					return path.join(path.dirname(path.resolve(targetFile.path)), match);
+				},
+				log: true
+			}))
+			.pipe(concat('filtered.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				assertFilesEqual('filtered.js');
+				done();
+			}));
+	});
 });
