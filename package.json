@@ -9,7 +9,6 @@
     "node": ">=6"
   },
   "scripts": {
-    "pretest": "npm i",
     "test": "./node_modules/mocha/bin/mocha"
   },
   "main": "./index.js",
