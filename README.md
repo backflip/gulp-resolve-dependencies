@@ -99,6 +99,16 @@ Type: `Boolean`
 
 Whether to just continue instead of emitting an error if circular dependencies are detected (defaults to ```false```).
 
+#### options.include
+Type: `Array`
+
+Only dependencies matching this array of absolute paths will be included (defaults to ```[]```).
+
+#### options.exclude
+Type: `Array`
+
+Dependencies matching this array of absolute paths will be excluded (defaults to ```[]```).
+
 
 ## Contributors
 

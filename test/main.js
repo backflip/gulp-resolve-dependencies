@@ -110,4 +110,30 @@ describe('gulp-resolve-dependencies', function() {
 				done();
 			}));
 	});
+
+	it('should exclude depencencies from fixtures/libs', function(done) {
+		gulp.src(__dirname + '/fixtures/main.js')
+			.pipe(resolveDependencies({
+				exclude: [path.resolve(__dirname, "fixtures/libs/**/*")]
+			}))
+			.pipe(concat('mainexclude.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				assertFilesEqual('mainexclude.js');
+				done();
+			}));
+	});
+
+	it('should only include depencencies from fixtures/test', function(done) {
+		gulp.src(__dirname + '/fixtures/main.js')
+			.pipe(resolveDependencies({
+				include: [path.resolve(__dirname, "fixtures/test/**/*")]
+			}))
+			.pipe(concat('maininclude.js'))
+			.pipe(gulp.dest(__dirname + '/results/'))
+			.pipe(es.wait(function() {
+				assertFilesEqual('maininclude.js');
+				done();
+			}));
+	});
 });
