@@ -77,6 +77,18 @@ Parameters:
 
 The `path` package is available in this context.
 
+Returning a falsy value will ignore the resolved path:
+```javascript
+function(match, targetFile) {
+    // Ignore `/lib.js`
+    if (match.match(/\/lib\.js$/)) {
+        return null;
+    }
+
+    return path.join(path.dirname(targetFile.path), match);
+}
+```
+
 #### options.log
 Type: `Boolean`
 

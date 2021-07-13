@@ -48,6 +48,14 @@ function resolveDependencies(config) {
 			while (match = pattern.exec(content)) {
 				filePath = config.resolvePath(match[1], targetFile);
 
+				if (!filePath) {
+					if (config.log) {
+						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] Ignored', match[1]);
+					}
+
+					continue;
+				}
+
 				// Check for circular dependencies
 				try {
 					dag.addEdge(targetFile.path, filePath);
