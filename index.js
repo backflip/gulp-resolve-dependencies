@@ -50,12 +50,22 @@ function resolveDependencies(config) {
 			
 			while (match = pattern.exec(content)) {
 				filePath = config.resolvePath(match[1], targetFile);
+        
+        // Ignore falsy returns
+				if (!filePath) {
+					if (config.log) {
+						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] Ignored', match[1]);
+					}
+
+          continue;
+        }
 
 				// Check include
 				if (config.include && config.include.length !== 0 && !config.include.some(_ => minimatch(filePath, _))) {
 					if (config.log) {
 						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] File not included:', filePath);
 					}
+
 					continue;
 				}
 
@@ -64,6 +74,7 @@ function resolveDependencies(config) {
 					if (config.log) {
 						Log('[' + AnsiColors.green(PLUGIN_NAME) + '] File excluded:', filePath);
 					}
+
 					continue;
 				}
 
