@@ -116,3 +116,4 @@ Dependencies matching this array of absolute paths will be excluded (defaults to
 * @doronin: [Path resolver option](https://github.com/backflip/gulp-resolve-dependencies/pull/8)
 * @goodforenergy: [Relative file paths](https://github.com/backflip/gulp-resolve-dependencies/pull/16)
 * @adrianosanti: [Outdated dependencies](https://github.com/backflip/gulp-resolve-dependencies/pull/18)
+* @Nauja: [Include/exclude options](https://github.com/backflip/gulp-resolve-dependencies/pull/23)
